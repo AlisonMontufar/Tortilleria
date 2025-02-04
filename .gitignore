@@ -1,0 +1,40 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# node_modules de frontend y backend
+Tortilleria/node_modules/
+BTortilleria/node_modules/
+
+# Carpeta de build, dist y otros archivos generados
+Tortilleria/dist/
+BTortilleria/dist/
+Tortilleria/dist-ssr/
+BTortilleria/dist-ssr/
+Tortilleria/.next/
+BTortilleria/.next/
+
+# Archivos de configuración del editor (VSCode, IDEs, etc.)
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Archivos temporales
+*.tmp
+*.swp
+*.bak
+*.orig
+
+# Dependencias globales de npm
+npm-global/
