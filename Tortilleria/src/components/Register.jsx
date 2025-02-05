@@ -68,7 +68,7 @@ function Register({ onRegisterSuccess }) {
         }
 
         try {
-            await axios.post('http://localhost:5000/api/users/register', formData);
+            await axios.post('https://btortilleria.onrender.com/api/users/register', formData);
             setMessage('Registro exitoso.');
             onRegisterSuccess(formData.username);  // Redirigir al iniciar sesión
         } catch (error) {
