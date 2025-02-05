@@ -57,7 +57,7 @@ function Login({ onLogin }) {
 
             const token = response.data.token;
             localStorage.setItem('token', token); // Guardar el token en localStorage
-            setMessage('Inicio de sesión exitoso.');
+            setMessage('Inicio de sesión exitoso!');
 
             onLogin(username);  // Llamamos a la función para actualizar el estado en App.jsx
         } catch (error) {
