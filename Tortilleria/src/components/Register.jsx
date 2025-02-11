@@ -69,7 +69,7 @@ function Register({ onRegisterSuccess }) {
             // 🔹 Excluir confirmPassword antes de enviar a la API
             const { confirmPassword, ...dataToSend } = formData;
 
-            await axios.post('http://localhost:5000/api/users/register', dataToSend);
+            await axios.post('https://btortilleria.onrender.com/api/users/register', dataToSend);
             setMessage('Registro exitoso!');
             onRegisterSuccess(formData.username);
         } catch (error) {
