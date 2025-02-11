@@ -14,12 +14,9 @@ function Login({ onLogin }) {
     const validateForm = () => {
         let isValid = true;
 
-        // Validar usuario o correo
+        // Validar usuario o correo o teléfono
         if (!username.trim()) {
-            setErrorUsername('El nombre de usuario o correo electrónico es obligatorio.');
-            isValid = false;
-        } else if (!/\S+@\S+\.\S+/.test(username) && username.length < 5) {
-            setErrorUsername('Formato inválido: ingresa un correo válido o un nombre de usuario de al menos 5 caracteres.');
+            setErrorUsername('El nombre de usuario, correo o teléfono es obligatorio.');
             isValid = false;
         } else {
             setErrorUsername('');
@@ -50,7 +47,8 @@ function Login({ onLogin }) {
         }
 
         try {
-            const response = await axios.post('https://btortilleria.onrender.com/api/users/login', {
+            // Enviar username (que puede ser usuario, correo o teléfono) y contraseña al backend
+            const response = await axios.post('http://localhost:5000/api/users/login', {
                 username,
                 password,
             });
@@ -74,7 +72,7 @@ function Login({ onLogin }) {
             <h2 className="text-center mt-4">Inicio de Sesión</h2>
             <form onSubmit={handleSubmit} className="mt-4">
                 <div className="form-group">
-                    <label htmlFor="username">Usuario o Correo Electrónico</label>
+                    <label htmlFor="username">Usuario, Correo Electrónico o Teléfono</label>
                     <input
                         type="text"
                         id="username"

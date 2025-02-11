@@ -3,10 +3,10 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 function Register({ onRegisterSuccess }) {
-    const navigate = useNavigate();  // hook de navegación
+    const navigate = useNavigate();
 
     const handleGoToHome = () => {
-        navigate("/");  // Navega a la página principal (Inicio)
+        navigate("/");
     };
 
     const [formData, setFormData] = useState({
@@ -16,13 +16,11 @@ function Register({ onRegisterSuccess }) {
         email: '',
         phone: '',
         password: '',
-        confirmPassword: ''
+        confirmPassword: '' // Se usa solo para validación, no para la API
     });
-    
 
     const [errors, setErrors] = useState({});
     const [message, setMessage] = useState('');
-   
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -34,23 +32,23 @@ function Register({ onRegisterSuccess }) {
 
         if (!formData.firstName.trim()) newErrors.firstName = 'El nombre es obligatorio.';
         if (!formData.lastName.trim()) newErrors.lastName = 'Los apellidos son obligatorios.';
-        if (!formData.username.trim() && !formData.email.trim()) {
-            newErrors.username = 'El nombre de usuario o el correo es obligatorio.';
-        }
-        if (formData.username.length < 5 && formData.username.trim()) {
-            newErrors.username = 'El usuario debe tener al menos 5 caracteres.';
-        }
+        if (!formData.username.trim()) newErrors.username = 'El nombre de usuario es obligatorio.';
+        if (formData.username.length < 5) newErrors.username = 'El usuario debe tener al menos 5 caracteres.';
+        
         if (!formData.email.trim()) {
             newErrors.email = 'El correo es obligatorio.';
         } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
             newErrors.email = 'Formato de correo inválido.';
         }
+
         if (!formData.phone.trim() || !/^\d{10}$/.test(formData.phone)) {
             newErrors.phone = 'El teléfono debe tener 10 dígitos.';
         }
+
         if (formData.password.length < 8 || !/\d/.test(formData.password) || !/[!@#$%^&*]/.test(formData.password)) {
             newErrors.password = 'Debe tener al menos 8 caracteres, un número y un símbolo.';
         }
+
         if (formData.confirmPassword !== formData.password) {
             newErrors.confirmPassword = 'Las contraseñas no coinciden.';
         }
@@ -68,19 +66,22 @@ function Register({ onRegisterSuccess }) {
         }
 
         try {
-            await axios.post('https://btortilleria.onrender.com/api/users/register', formData);
+            // 🔹 Excluir confirmPassword antes de enviar a la API
+            const { confirmPassword, ...dataToSend } = formData;
+
+            await axios.post('http://localhost:5000/api/users/register', dataToSend);
             setMessage('Registro exitoso!');
-            onRegisterSuccess(formData.username);  // Redirigir al iniciar sesión
+            onRegisterSuccess(formData.username);
         } catch (error) {
             console.error('Error en la solicitud:', error);
-            setMessage('Error al registrar el usuario. Intenta de nuevo.');
-            navigate('/errorPageRegister');
+            const errorMsg = error.response?.data?.message || 'Error al registrar el usuario. Intenta de nuevo.';
+            setMessage(errorMsg);
         }
     };
 
     return (
         <div className="container mt-4">
-          
+
 
             <h2 className="text-center mb-4">Registro de Usuario</h2>
 
@@ -129,13 +130,13 @@ function Register({ onRegisterSuccess }) {
             </div>
 
             <div className="text-center mt-3">
-            <p>¿Ya tienes una cuenta?</p>
-            <button onClick={handleGoToHome} className="btn btn-link">Iniciar sesión</button>
+                <p>¿Ya tienes una cuenta?</p>
+                <button onClick={handleGoToHome} className="btn btn-link">Iniciar sesión</button>
+            </div>
         </div>
-        </div>
-        
+
     );
-    
+
 }
 
 
