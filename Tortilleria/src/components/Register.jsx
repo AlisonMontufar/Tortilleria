@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 function Register({ onRegisterSuccess }) {
@@ -69,14 +68,31 @@ function Register({ onRegisterSuccess }) {
             // 🔹 Excluir confirmPassword antes de enviar a la API
             const { confirmPassword, ...dataToSend } = formData;
 
-            await axios.post('https://btortilleria.onrender.com/api/users/register', dataToSend);
+
+                                        //
+                                        //https://btortilleria.onrender.com/api/users/register
+
+            const response = await fetch('https://btortilleria.onrender.com/api/users/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(dataToSend),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Error al registrar el usuario. Intenta de nuevo.');
+            }
+
             setMessage('Registro exitoso!');
             onRegisterSuccess(formData.username);
         } catch (error) {
             console.error('Error en la solicitud:', error);
-            const errorMsg = error.response?.data?.message || 'Error al registrar el usuario. Intenta de nuevo.';
-            setMessage(errorMsg);
+            setMessage(error.message || 'Error al registrar el usuario. Intenta de nuevo.');
+            navigate('/errorPageRegister');
         }
+      
     };
 
     return (

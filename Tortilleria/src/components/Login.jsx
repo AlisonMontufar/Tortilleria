@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 function Login({ onLogin }) {
@@ -46,24 +45,40 @@ function Login({ onLogin }) {
             return;
         }
 
+
+                                        //
+                                        //https://btortilleria.onrender.com/api/users/login
         try {
-            // Enviar username (que puede ser usuario, correo o teléfono) y contraseña al backend
-            const response = await axios.post('https://btortilleria.onrender.com/api/users/login', {
-                username,
-                password,
+            const response = await fetch('https://btortilleria.onrender.com/api/users/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username,
+                    password,
+                }),
             });
 
-            const token = response.data.token;
-            localStorage.setItem('token', token); // Guardar el token en localStorage
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Hubo un error al intentar iniciar sesión.');
+            }
+
+            const data = await response.json();
+            const token = data.token;
+
+            // Guardar el token en localStorage
+            localStorage.setItem('token', token);
             setMessage('Inicio de sesión exitoso!');
 
-            onLogin(username);  // Llamamos a la función para actualizar el estado en App.jsx
+           
+            onLogin(username);
+
         } catch (error) {
             console.error('Error en la solicitud:', error);
-            const errorMsg =
-                error.response?.data?.message || 'Hubo un error al intentar iniciar sesión.';
-            setMessage(errorMsg);
-            navigate('/errorPage');
+            setMessage(error.message);
+            navigate('/errorPage'); // Navegar a la página de error en caso de fallo
         }
     };
 
