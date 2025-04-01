@@ -8,6 +8,16 @@ import WelcomePage from './components/WelcomePage';
 import Layout from './components/Layout';
 import CrearPedido from './components/CrearPedido';
 import Pedidos from './components/Pedidos';
+import Empleados from './components/Empleados';
+import Proveedores from './components/Proveedores';
+import Gastos from './components/Gastos';
+import Inventario from './components/Inventario';
+import Maquinas from './components/Maquinas';
+import Ventas from './components/Ventas';
+import Clientes from './components/Clientes';
+import Produccion from './components/Produccion';
+import DynamicCRUD from './components/DynamicCRUD';
+
 
 function App() {
   const [user, setUser] = useState(null);
@@ -67,6 +77,15 @@ function App() {
           <Route path="/" element={<WelcomePage user={user} onLogout={handleLogout} />} />
           <Route path="/crearPedido" element={<CrearPedido />} />
           <Route path="/pedidos" element={<Pedidos />} />
+          <Route path="/empleados" element={<Empleados />} />
+          <Route path="/gastos" element={<Gastos />} />
+          <Route path="/inventario" element={<Inventario />} />
+          <Route path="/maquinas" element={<Maquinas />} />
+          <Route path="/proveedores" element={<Proveedores />} />
+          <Route path="/ventas" element={<Ventas />} />
+          <Route path="/clientes" element={<Clientes />} />
+          <Route path="/produccion" element={<Produccion />} />
+          <Route path="/dynamicCRUD" element={<DynamicCRUD />} />
         </Routes>
       )}
 

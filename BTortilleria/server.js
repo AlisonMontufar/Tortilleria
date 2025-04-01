@@ -4,6 +4,7 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const userRoutes = require('./routes/userRoutes');
 const pedidoRoutes = require('./routes/pedidoRoutes'); // Importa las rutas de pedidos
+const profilesRoutes = require('./routes/profilesRoutes');
 
 dotenv.config();
 
@@ -17,6 +18,8 @@ app.use('/api/users', userRoutes);
 
 // Rutas de pedidos
 app.use('/api/pedidos', pedidoRoutes);
+
+app.use("/api/perfiles", profilesRoutes);
 
 const PORT = process.env.PORT || 5000;
 

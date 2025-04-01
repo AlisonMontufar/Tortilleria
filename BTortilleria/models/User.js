@@ -7,8 +7,7 @@ const UserSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
     phone: { type: String, required: true },
     password: { type: String, required: true },
-    role: { type: String, default: 'user' }
+    perfil: { type: mongoose.Schema.Types.ObjectId, ref: 'Perfil', required: true } // Referencia al perfil
 });
 
 module.exports = mongoose.model('User', UserSchema);
-

@@ -45,40 +45,52 @@ function Login({ onLogin }) {
             return;
         }
 
-
-                                        //
-                                        //https://btortilleria.onrender.com/api/users/login
         try {
             const response = await fetch('https://btortilleria.onrender.com/api/users/login', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    username,
-                    password,
-                }),
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
             });
 
             if (!response.ok) {
                 const errorData = await response.json();
-                throw new Error(errorData.message || 'Hubo un error al intentar iniciar sesión.');
+                throw new Error(errorData.message || 'Error en la autenticación');
             }
 
             const data = await response.json();
-            const token = data.token;
 
-            // Guardar el token en localStorage
-            localStorage.setItem('token', token);
+            // Guardar token, usuario y permisos en localStorage
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('user', JSON.stringify(data.user));  
+            localStorage.setItem('permisos', JSON.stringify(data.user.permisos));
+
+            console.log("User localstore:",data);
+
             setMessage('Inicio de sesión exitoso!');
-
-           
             onLogin(username);
+
+            // Redireccionar según los permisos del usuario
+            const permisos = data.user.permisos || [];
+            
+            if (permisos.some(p => p.modulo === 'Admin')) {
+                navigate('/admin/dashboard');
+            } else if (permisos.some(p => p.modulo === 'Ventas')) {
+                navigate('/ventas');
+            } else if (permisos.some(p => p.modulo === 'Producción')) {
+                navigate('/produccion');
+            } else {
+                navigate('/'); // Página predeterminada para usuarios sin permisos específicos
+            }
 
         } catch (error) {
             console.error('Error en la solicitud:', error);
-            setMessage(error.message);
-            navigate('/errorPage'); // Navegar a la página de error en caso de fallo
+
+            // Limpiar localStorage en caso de error
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            localStorage.removeItem('permisos');
+
+            setMessage(`Error: ${error.message}`);
         }
     };
 
@@ -115,7 +127,9 @@ function Login({ onLogin }) {
                 </button>
             </form>
 
-            {message && <div className="alert alert-info mt-3">{message}</div>}
+            {message && <div className={`alert ${message.includes('Error') ? 'alert-danger' : 'alert-success'} mt-3`}>
+                {message}
+            </div>}
         </div>
     );
 }
