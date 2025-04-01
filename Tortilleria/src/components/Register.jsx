@@ -27,7 +27,7 @@ function Register({ onRegisterSuccess }) {
     useEffect(() => {
         const fetchPerfiles = async () => {
             try {
-                const response = await fetch('http://localhost:5000/api/perfiles/'); // Ajusta esta URL a tu ruta real
+                const response = await fetch('https://btortilleria.onrender.com/api/perfiles/'); // Ajusta esta URL a tu ruta real
                 if (!response.ok) throw new Error('Error al obtener los perfiles');
                 const data = await response.json();
                 setPerfiles(data); // Asumimos que la API devuelve una lista de perfiles
